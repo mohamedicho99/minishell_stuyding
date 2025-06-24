@@ -9,7 +9,8 @@ typedef enum
 {
 	T_WORD,
 	T_PIPE,
-	T_RED,
+	T_RED_IN,
+	T_RED_OUT,
 } TokenType;
 
 typedef struct
@@ -18,5 +19,19 @@ typedef struct
 	TokenType type;
 } Token;
 
+typedef struct list
+{
+	Token 		*token;
+	struct list	*next;
+}	t_list;
 
 #endif
+
+
+// before i hit the delimiter 
+// keep buffering
+//
+// challeges are:
+// 	:q
+//
+// after i hit the delimiter 

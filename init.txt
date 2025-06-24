@@ -32,21 +32,7 @@ first,
 		single or double quotes and called that process activating either 
 		single or double quote, so he knows how his program should act!)
 
-
-
 ______________
-
-first,
-
-	tokanize and put everthing into the AST 
-
-		as i build the thing, i should have rules to check the grammar and
-			positionning before moving on to the next thing! 
-
-		example:
-			i the first token is the pipe! 
-			i return syntax error and return a new prompt or exit! 
-
 
 (grammar rules are extracted regarding the positioning and syntax of the tokens)
 (every token has it's own rules if you look deeply into it!
@@ -59,10 +45,7 @@ rules:
 	create two tokens for \ (backslash) and ; (semi_colon)
 		if any detected, give syntax error
 
-
-
-
-_____________________-
+_____________________
 
 number one priority: 
 
@@ -73,3 +56,11 @@ do this for about two hours or so!
 firt do it without quotes at first.
 
 try to think about dynamic string and how could you implement them in here! 
+
+
+_________________________________________
+
+right now, i should be coding, i don't know exaactly what's keeping from doing
+	the work that needs to be done! 
+
+i think all i need is some pushups
