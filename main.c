@@ -49,11 +49,9 @@ void pc(char *str)
 	buffer[0] = '\0';
 
 	int i = 0;
-	int buf_len = ft_strlen(buffer);
-	printf("%d\n", buf_len);
 	while (str[i])
 	{
-		buffer = realloc(buffer, sizeof(char) * buf_len);
+		buffer = realloc(buffer, sizeof(char) * 2);
 		buffer[i] = str[i];
 		
 		// instead of printing this, i need to add it to buffer 
