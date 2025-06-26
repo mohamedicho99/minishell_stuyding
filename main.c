@@ -49,16 +49,18 @@ void pc(char *str)
 	buffer[0] = '\0';
 
 	int i = 0;
+	int buf_len = 0;
 	while (str[i])
 	{
-		buffer = realloc(buffer, sizeof(char) * 2);
+		buffer = realloc(buffer, sizeof(char) * (buf_len + 2));
 		buffer[i] = str[i];
+		buffer[i+1] = '\0';
+		printf("buffer content: %s\n", buffer);
 		
 		// instead of printing this, i need to add it to buffer 
 		// keep doing that until i hit a pipe or space
 		i++;
 	}
-	buffer[i] = '\0';
 	printf("%s", buffer);
 	printf("\n");
 	exit(0);
