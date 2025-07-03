@@ -1,4 +1,4 @@
-what do i know so far about parsing? 
+ what do i know so far about parsing? 
 
 parsing has tree stages! 
 
