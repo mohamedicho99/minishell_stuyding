@@ -37,9 +37,18 @@ int is_pipe(char c)
 int ft_strlen(char *s)
 {
 	int i = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 		i++;
 	return (i);
+}
+
+int is_delimiter(char c)
+{
+	if (c == '|' || c == ' ' || c == '>' || c == '<')
+		return (1);
+	return (0);
 }
 
 void pc(char *str)
@@ -55,6 +64,8 @@ void pc(char *str)
 		buffer = realloc(buffer, sizeof(char) * (buf_len + 2));
 		buffer[i] = str[i];
 		buffer[i+1] = '\0';
+		if (is_delimiter(buffer[i - 1]))
+			printf("we hit a delimiter\n");
 		printf("buffer content: %s\n", buffer);
 		
 		// instead of printing this, i need to add it to buffer 
@@ -75,7 +86,6 @@ int main(void)
 		input = readline("prompt $ ");
 		if (!input)
 			break;
-		//printf("you said: %s\n", input);
 		pc(input);
 		if (*input == '\0')
 		{
