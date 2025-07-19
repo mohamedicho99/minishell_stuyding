@@ -25,6 +25,13 @@ typedef struct list
 	struct list	*next;
 }	t_list;
 
+
+Token *ft_newtoken(char *s, TokenType type);
+t_list *ft_lstnew(Token *token);
+void	ft_lstadd_back(t_list **head, t_list *new);
+t_list *ft_lstlast(t_list *lst);
+int 	cut_str(char *s, int i, t_list **head, int *intoken);
+
 #endif
 
 

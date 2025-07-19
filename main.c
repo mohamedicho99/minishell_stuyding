@@ -51,30 +51,60 @@ int is_delimiter(char c)
 	return (0);
 }
 
+TokenType ret_t_type(char *s)
+{
+	if (*s == '|')
+		return (T_PIPE);
+	else if (*s == '>')
+		return (T_RED_OUT);
+	else if (*s == '<')
+		return (T_RED_OUT);
+	else
+		return (T_WORD);
+}
+
+void print_list(t_list *head)
+{
+	while (head)
+	{
+		printf("%s is of type %d\n", head->token->str, head->token->type);
+		head = head->next;
+	}
+}
+
 void pc(char *str)
 {
 	char *buffer; 
 	buffer = malloc(sizeof(char));
 	buffer[0] = '\0';
+	t_list *head;
+	Token *t;
+	t_list *new;
+	int intoken = 0;
+
 
 	int i = 0;
 	int buf_len = 0;
+	head = NULL;
 	while (str[i])
 	{
-		buffer = realloc(buffer, sizeof(char) * (buf_len + 2));
-		buffer[i] = str[i];
-		buffer[i+1] = '\0';
-		if (is_delimiter(buffer[i - 1]))
-			printf("we hit a delimiter\n");
-		printf("buffer content: %s\n", buffer);
-		
-		// instead of printing this, i need to add it to buffer 
-		// keep doing that until i hit a pipe or space
+		if (!cut_str(str, i, &head, &intoken))
+		{
+			buffer = realloc(buffer, sizeof(char) * (buf_len + 2));
+			buffer[i] = str[i];
+			buffer[i+1] = '\0';
+			intoken = 1;
+		}
+		if (!intoken)
+		{
+			intoken = 0;
+			t = ft_newtoken(buffer, T_PIPE);
+			new = ft_lstnew(t);
+			ft_lstadd_back(&head, new);
+		}
 		i++;
 	}
-	printf("%s", buffer);
-	printf("\n");
-	exit(0);
+	print_list(head);
 }
 
 

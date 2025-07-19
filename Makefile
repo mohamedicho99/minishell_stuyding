@@ -1,7 +1,7 @@
 # Simple Makefile for minishell project
 
 NAME = minishell
-SRC = main.c
+SRC = main.c token_utils.c
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 LIBS = -lreadline
