@@ -1,39 +1,6 @@
 #include "minishell.h"
 #include <readline/readline.h>
 
-// build these functions
-// is operator
-// 	is redirect input
-// 	is redirect output
-// is space
-// is pipe
-// is null terminator
-//
-// these are the things that i'm going to use as delimiters 
-//
-// space
-// '\0' null terminator
-// operators
-// 	append
-// 	heredoc
-// 	pipe
-// 	redirect input
-// 	redirect output
-
-int is_space(char c)
-{
-	if (c == ' ')
-		return (1);
-	return (0);
-}
-
-int is_pipe(char c)
-{
-	if (c == '|')
-		return (1);
-	return (0);
-}
-
 int ft_strlen(char *s)
 {
 	int i = 0;
@@ -44,12 +11,6 @@ int ft_strlen(char *s)
 	return (i);
 }
 
-int is_delimiter(char c)
-{
-	if (c == '|' || c == ' ' || c == '>' || c == '<')
-		return (1);
-	return (0);
-}
 
 TokenType ret_t_type(char *s)
 {
@@ -63,6 +24,52 @@ TokenType ret_t_type(char *s)
 		return (T_WORD);
 }
 
+void tokanize(char *s, int i)
+{
+	char *word = NULL;
+	int j = 0;
+	word = malloc(sizeof(char) * (i + 1));
+	while (s[j] && j < i)
+	{
+		word[j] = s[j];
+		j++;
+	}
+	word[j] = '\0';
+	printf("%s\n", word);
+}
+
+// the main loop 
+// while not delimiter move through the str and collect the word
+// once met a delimiter 
+// make a word token
+// take that delimiter and see it's not \0 or space 
+// keep moving through the string until you find another thing that
+// doesn't equal that delimiter, for example:
+// 	keep collecting them pipes ||||||>
+// 	until you hit the redirect output delimiter
+// before moving on, make a check for every redirection 
+// append, and pipe or heredocc,
+// check their length, if not one, then syntax error
+// make another token for that if only one proper delimiter is given
+//
+
+void pc(char *str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		if (str[i] != '|' && str[i] != '>' && str[i] != '<' && str[i] != ' ')
+			i++;
+		else
+		{
+			tokanize(str, i);
+			break;
+		}
+	}
+}
+
+
+/*
 void print_list(t_list *head)
 {
 	while (head)
@@ -80,24 +87,20 @@ void pc(char *str)
 	t_list *head;
 	Token *t;
 	t_list *new;
-	int intoken = 0;
-
 
 	int i = 0;
 	int buf_len = 0;
 	head = NULL;
 	while (str[i])
 	{
-		if (!cut_str(str, i, &head, &intoken))
+		if (!cut_str(str, i, &head))
 		{
 			buffer = realloc(buffer, sizeof(char) * (buf_len + 2));
 			buffer[i] = str[i];
 			buffer[i+1] = '\0';
-			intoken = 1;
 		}
-		if (!intoken)
+		else if (!intoken)
 		{
-			intoken = 0;
 			t = ft_newtoken(buffer, T_PIPE);
 			new = ft_lstnew(t);
 			ft_lstadd_back(&head, new);
@@ -106,6 +109,7 @@ void pc(char *str)
 	}
 	print_list(head);
 }
+*/
 
 
 int main(void)
@@ -145,5 +149,15 @@ the next step or the next problem to tackle is breaking down the text into
 		space
 
 	a pipe , a word , redirect input, redirect output
+
+//
+// space
+// '\0' null terminator
+// operators
+// 	append
+// 	heredoc
+// 	pipe
+// 	redirect input
+// 	redirect output
  
  * */
