@@ -11,6 +11,8 @@ typedef enum
 	T_PIPE,
 	T_RED_IN,
 	T_RED_OUT,
+	T_APPEND,
+	T_HEREDOC
 } TokenType;
 
 typedef struct

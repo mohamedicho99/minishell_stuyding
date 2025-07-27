@@ -1,6 +1,21 @@
 #include "minishell.h"
 #include <readline/readline.h>
 
+
+
+/* flag = 0;
+ *     "ls"       -l  >>>>>>>>> out | "cat  | "      0
+ * while is space = skip
+ * {text = ls / type = word }
+ * {text = -l / type = word}
+ * {text = >>>>>>>> / type = redirect_app}
+ * {text = out / type = word}
+ * {text = | / type = pipe}
+ * {text = cat   |  / type = word}
+ * */
+
+
+
 int ft_strlen(char *s)
 {
 	int i = 0;
@@ -11,6 +26,14 @@ int ft_strlen(char *s)
 	return (i);
 }
 
+void print_list(t_list *head)
+{
+	while (head)
+	{
+		printf("%s is of type %d\n", head->token->str, head->token->type);
+		head = head->next;
+	}
+}
 
 TokenType ret_t_type(char *s)
 {
@@ -24,19 +47,29 @@ TokenType ret_t_type(char *s)
 		return (T_WORD);
 }
 
-void tokanize(char *s, int i)
+void tokanize_word(char *s, int i, int j, t_list **head)
 {
-	char *word = NULL;
-	int j = 0;
-	word = malloc(sizeof(char) * (i + 1));
-	while (s[j] && j < i)
+	int		len;
+	char	*word;
+	t_list	*new;
+	Token	*token;
+
+	len = i - j;
+	word = malloc(sizeof(char) * (len + 1));
+	j = 0;
+	while (s[j] && j < len)
 	{
 		word[j] = s[j];
 		j++;
 	}
 	word[j] = '\0';
-	printf("%s\n", word);
+
+	token = ft_newtoken(word, T_WORD);
+	new = ft_lstnew(token);
+	ft_lstadd_back(head, new);
+	return ;
 }
+
 
 // the main loop 
 // while not delimiter move through the str and collect the word
@@ -53,63 +86,45 @@ void tokanize(char *s, int i)
 // make another token for that if only one proper delimiter is given
 //
 
+int is_delimiter(char c)
+{
+	if (c == '|' || c == '>' || c == '<' || c == ' ' || c == '\0')
+		return (1);
+	return (0);
+}
+
 void pc(char *str)
 {
 	int i = 0;
-	while (str[i])
-	{
-		if (str[i] != '|' && str[i] != '>' && str[i] != '<' && str[i] != ' ')
-			i++;
-		else
-		{
-			tokanize(str, i);
-			break;
-		}
-	}
-}
-
-
-/*
-void print_list(t_list *head)
-{
-	while (head)
-	{
-		printf("%s is of type %d\n", head->token->str, head->token->type);
-		head = head->next;
-	}
-}
-
-void pc(char *str)
-{
-	char *buffer; 
-	buffer = malloc(sizeof(char));
-	buffer[0] = '\0';
+	int j = 0;
 	t_list *head;
-	Token *t;
-	t_list *new;
-
-	int i = 0;
-	int buf_len = 0;
 	head = NULL;
+
 	while (str[i])
 	{
-		if (!cut_str(str, i, &head))
+		if (!is_delimiter(str[i]))
+			i++;
+		else if (is_delimiter(str[i]))
 		{
-			buffer = realloc(buffer, sizeof(char) * (buf_len + 2));
-			buffer[i] = str[i];
-			buffer[i+1] = '\0';
+			// save the value of str[i], example: str[i] = '|'
+			// continue reading until you find anything that doesn't equal pipe
+			tokanize_word(str, i, j, &head);
+			j = ++i;
+			/*
+			c = str[i];
+			while (str[j] && str[j] == c)
+				j++;
+			tokanize_del(str, c, i, j, &head);
+			i += j;
+			*/
 		}
-		else if (!intoken)
-		{
-			t = ft_newtoken(buffer, T_PIPE);
-			new = ft_lstnew(t);
-			ft_lstadd_back(&head, new);
-		}
-		i++;
+		tokanize_word(str, i, j, &head);
 	}
 	print_list(head);
 }
-*/
+
+
+
 
 
 int main(void)
@@ -131,26 +146,6 @@ int main(void)
 	return (0);
 }
 
-
-/*
-
-the next step or the next problem to tackle is breaking down the text into 
-	tokens and then after that comes the lexing part!
-
-	first we loop through the string somehow until we find any of them already 
-		defined tokens! 
-	
-	we delimit with these, either:
-		operator
-		redirect input
-		redirect output
-		pipe
-		null terminator
-		space
-
-	a pipe , a word , redirect input, redirect output
-
-//
 // space
 // '\0' null terminator
 // operators
@@ -159,5 +154,3 @@ the next step or the next problem to tackle is breaking down the text into
 // 	pipe
 // 	redirect input
 // 	redirect output
- 
- * */
