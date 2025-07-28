@@ -1,30 +1,38 @@
 #include "libft.h"
 #include <string.h>
 
+void *ft_memcpy(void *dest, void *src, int n)
+{
+	unsigned const char *s;
+	unsigned char *d;
+
+	d = (unsigned char *)dest;
+	s = (unsigned const char *)src;
+
+	while (n--)
+		*d++ = *s++;
+	return (dest);
+}
+
 t_string *ft_newstr(char *s)
 {
-	t_string *new;
+	t_string	*new;
+	int			len;
 
 	new = malloc(sizeof(t_string));
 	if (!new)
 		return (NULL);
-	int len = strlen(s);
+	len = strlen(s);
 	new->str = malloc(sizeof(char) * (len + 1));
 	if (!new->str)
 	{
 		free(new);
 		return (NULL);
 	}
-	int i = 0;
-	while (s[i])
-	{
-		new->str[i] = s[i];
-		i++;
-	}
-	new->str[i] = '\0';
+	ft_memcpy(new->str, s, len);
+	new->str[len] = '\0';
 	new->cap = len + 1;
-	new->len = strlen(new->str);
-
+	new->len = len;
 	return (new);
 }
 
@@ -48,20 +56,13 @@ char *tokanize_word(t_string *str)
 		str->peek++;
 		i++;
 	}
-	int len = str->end - str->start + 1;
-	//printf("len: %d\n", len);
-	char *s = malloc(sizeof(char) * len);
+	int len = str->end - str->start;
+	char *s = malloc(sizeof(char) * (len + 1));
 	if (!s)
 		return (NULL);
 	i = str->start;
-	int j = 0;
-	while (i < str->end)
-	{
-		s[j] = str->str[i];
-		i++;
-		j++;
-	}
-	s[j] = '\0';
+	ft_memcpy(s, str->str + str->start, len);
+	s[len] = '\0';
 	return (s);
 }
 
@@ -76,12 +77,17 @@ void pc(t_string *str)
 	{
 		if (str->str[i] == ' ')
 		{
-			i++;
-			str->peek++;
+			str->peek = ++i;
+			continue ;
+		}
+		if (is_delimiter(str->str[i]) && str->str[i] != ' ')
+		{
+			//printf("d: %c\n", str->str[i]);
+			++i;
 			continue ;
 		}
 		s = tokanize_word(str);
-		printf("%s\n", s);
+		printf("s: %s\n", s);
 		i++;
 	}
 	exit(0);
