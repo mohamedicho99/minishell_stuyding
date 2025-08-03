@@ -70,12 +70,15 @@ char *tokanize_word(t_string *str)
 // and keep moving inside str->str until w_q_len
 char *tokanize_inside_quote(t_string *str)
 {
+	// maybe this function is the one causing the mess
+	// the indexing here is the problem maybe
 	char *s = malloc(sizeof(char) * (str->w_q_len + 1));
 	if (!s)
 		return NULL;
 	ft_memcpy(s, str->str + str->q_pos + 1, str->w_q_len);
 	s[str->w_q_len] = '\0';
-	str->peek += str->w_q_len + 2;
+	// or maybe add that 2 only under a condition
+	str->peek += str->w_q_len; // + 2
 	return (s);
 }
 
@@ -140,7 +143,10 @@ void pc(t_string *str)
 					handle_quote(str);
 				}
 				else
+				{
 					str->quote = '\0';
+					//str->peek++;
+				}
 			}
 			if (str->str[str->peek] == ' ')
 			{
@@ -150,8 +156,11 @@ void pc(t_string *str)
 			collect_delimiter(str);
 			continue ;
 		}
-		s = tokanize_word(str);
-		printf("s: %s\n", s);
+		else
+		{
+			s = tokanize_word(str);
+			printf("s: %s\n", s);
+		}
 	}
 }
 
