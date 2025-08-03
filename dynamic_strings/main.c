@@ -108,7 +108,6 @@ void pc(t_string *str)
 		}
 		s = tokanize_word(str);
 		printf("s: %s\n", s);
-		str->peek++;
 	}
 }
 
@@ -122,6 +121,7 @@ void set_def(t_string *str)
 
 int main(void)
 {
+	//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"echo \"\"hello world\"\"   <<<<<<<";
 	char *input = "   ls -l | cat file.txt >> here.txt |||||    \"echo \"\"hello world\"\"\"\"\"\"\"   <<<<<<<";
 
 	t_string *str = ft_newstr(input);
