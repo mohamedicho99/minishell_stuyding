@@ -14,6 +14,9 @@ typedef struct
 	int start;
 	int end;
 	int peek;
+	char quote;
+	int q_pos;
+	int w_q_len;
 } t_string;
 
 #endif
