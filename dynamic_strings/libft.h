@@ -8,6 +8,7 @@
 typedef struct
 {
 	char *str;
+	char del;
 	int len;
 	int cap;
 	int start;

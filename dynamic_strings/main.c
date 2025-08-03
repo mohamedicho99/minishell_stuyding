@@ -46,51 +46,71 @@ int is_delimiter(char c)
 //char *input = "   ls -l | cat file.txt >> here.txt   ";
 char *tokanize_word(t_string *str)
 {
-	int i = 0;
+	int len;
+	char *s;
+
+	s = NULL;
 	str->start = str->peek;
 	str->end = str->peek;
-	i = str->peek;
-	while (i < str->len && !is_delimiter(str->str[i]))
+	while (str->peek < str->len && !is_delimiter(str->str[str->peek]))
 	{
 		str->end++;
 		str->peek++;
-		i++;
 	}
-	int len = str->end - str->start;
-	char *s = malloc(sizeof(char) * (len + 1));
+	len = str->end - str->start;
+	s = malloc(sizeof(char) * (len + 1));
 	if (!s)
 		return (NULL);
-	i = str->start;
 	ft_memcpy(s, str->str + str->start, len);
 	s[len] = '\0';
 	return (s);
 }
 
+void collect_delimiter(t_string *str)
+{
+	int len;
+	char *s;
+
+	s = NULL;
+	str->del = str->str[str->peek];
+	str->start = str->peek;
+	str->end = str->peek;
+	while ((str->peek < str->len) && (str->str[str->peek] == str->del))
+	{
+		str->peek++;
+		str->end++;
+	}
+	len = str->end - str->start;
+	s = malloc(sizeof(char) * (len + 1));
+	if (!s)
+		return ;
+	ft_memcpy(s, str->str + str->start, len);
+	s[len] = '\0';
+	printf("s: %s\n", s);
+}
 void pc(t_string *str)
 {
-	int i = 0;
 	char *s;
 	s = NULL;
-	while (str->str[i] == ' ')
-		str->peek = ++i;
-	while (i < str->len)
+	while (str->str[str->peek] == ' ')
+		str->peek++;
+	while (str->peek < str->len)
 	{
-		if (str->str[i] == ' ')
+		if (str->str[str->peek] == ' ')
 		{
-			str->peek = ++i;
+			str->peek++;
 			continue ;
 		}
-		if (is_delimiter(str->str[i]) && str->str[i] != ' ')
+		if (is_delimiter(str->str[str->peek]) && str->str[str->peek] != ' ')
 		{
-			//printf("d: %c\n", str->str[i]);
-			++i;
+			collect_delimiter(str);
+			str->peek++;
 			continue ;
 		}
 		s = tokanize_word(str);
 		printf("s: %s\n", s);
-		i++;
+		str->peek++;
 	}
-	exit(0);
 }
 
 void set_def(t_string *str)
@@ -98,11 +118,12 @@ void set_def(t_string *str)
 	str->start = 0;
 	str->end = 0;
 	str->peek = 0;
+	str->del = '\0';
 }
 
 int main(void)
 {
-	char *input = "   ls -l | cat file.txt >> here.txt   ";
+	char *input = "   ls -l | cat file.txt >> here.txt |||||    \"echo \"\"hello world\"\"\"\"\"\"\"   <<<<<<<";
 
 	t_string *str = ft_newstr(input);
 	set_def(str);
@@ -110,3 +131,22 @@ int main(void)
 	pc(str);
 	return (0);
 }
+//"   ls -l | cat file.txt >> here.txt   ";
+//start creating tokens
+//if just word , add word
+//if delim, check if it's what you want , keep adding them until you find
+//another thing other than that value!
+//you can add it to the struct as last delim found,
+//it can either be 0 or any of these > | < " '
+//
+//test examples 
+//find the most complex  valid command 
+//	this one should pass
+//find the most complex unvalid command 
+//	this one should not pass
+//
+//
+//
+//	what happens in this case
+//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"\"\"\"\"\"\"\"\"\"   <<<<<<<";
+//you should legit ask about how to handle this thing
