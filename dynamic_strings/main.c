@@ -104,7 +104,6 @@ void pc(t_string *str)
 		if (is_delimiter(str->str[str->peek]) && str->str[str->peek] != ' ')
 		{
 			collect_delimiter(str);
-			str->peek++;
 			continue ;
 		}
 		s = tokanize_word(str);
