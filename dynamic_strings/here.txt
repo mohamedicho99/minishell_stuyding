@@ -1,3 +1,0 @@
-
-
-use dynamic strings, learn how to implement them to solve your problem

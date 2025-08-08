@@ -1,0 +1,12 @@
+
+
+we don't need to store them double or single quotes! 
+
+we only want what's inside! 
+
+so we do use them as delimiters to move and stop!
+
+	start 
+	end 
+		these two vars will help allocate anything that's inside them 
+			and make it a word token!
