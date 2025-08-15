@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <readline/readline.h>
 
 typedef enum
 {
@@ -32,15 +33,5 @@ Token *ft_newtoken(char *s, TokenType type);
 t_list *ft_lstnew(Token *token);
 void	ft_lstadd_back(t_list **head, t_list *new);
 t_list *ft_lstlast(t_list *lst);
-//int 	cut_str(char *s, int i, t_list **head);
 
 #endif
-
-
-// before i hit the delimiter 
-// keep buffering
-//
-// challeges are:
-// 	:q
-//
-// after i hit the delimiter 

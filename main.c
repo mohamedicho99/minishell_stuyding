@@ -70,22 +70,6 @@ void tokanize_word(char *s, int i, int j, t_list **head)
 	return ;
 }
 
-
-// the main loop 
-// while not delimiter move through the str and collect the word
-// once met a delimiter 
-// make a word token
-// take that delimiter and see it's not \0 or space 
-// keep moving through the string until you find another thing that
-// doesn't equal that delimiter, for example:
-// 	keep collecting them pipes ||||||>
-// 	until you hit the redirect output delimiter
-// before moving on, make a check for every redirection 
-// append, and pipe or heredocc,
-// check their length, if not one, then syntax error
-// make another token for that if only one proper delimiter is given
-//
-
 int is_delimiter(char c)
 {
 	if (c == '|' || c == '>' || c == '<' || c == ' ' || c == '\0')

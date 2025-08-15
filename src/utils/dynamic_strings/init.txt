@@ -1,0 +1,80 @@
+
+-> make a header file 
+-> organize work, makefile
+-> structres functions into utils for example, convension
+	src/utils/utils_1.c
+	src/utils/utils_2.c
+-> make a struct, make it a linked list for tokens
+-> check grammar
+
+???? expantion
+
+HEREDOC CASE SYNTAX ERROR:
+	when it comes to the heredoc problem, it only works if it comes before 
+		the syntax error, otherwise it shouldn't work!
+
+-------------
+
+fix the thing in collect delimiter 
+	>>><<<< 
+	this should all be in one token
+
+
+------------ solution and steps 
+
+first, let's read all the functions, split them by their job description 
+	create a folder called src, 
+	src/
+	src/libf_functions
+	src/tokenizing_funtions
+
+
+for this case
+	>>>>>
+		you compare between del[0] == '>'
+			enter another function that checks it's length
+
+
+	first, for each token we need to figure out what kind of token is it? 
+		when it comes to word, that's very clear! 
+
+	but when it comes to the delimiters, 
+		there's needs to be some thinking
+
+________
+
+that t_list *head should be accessible from everywhere, 
+	so it should be initialized in the main function
+
+
+________--
+
+inside handle delimiter; have this:
+	if del[0] == '|'
+		it's a pipe token
+
+	if del[0] == '>' || del[0] == '<':
+		> 
+		>>
+		<
+		<<
+		check this after that:
+		if del[1] != '\0'
+			it's either append
+			or 
+			heredoc
+
+____________ 
+where to start 
+
+1, start by creating a minishell.c that calls every function that it needs,
+	only that file should have a main function,
+
+2, start by using the readline function again,
+
+3, start breaking down files
+
+4, break down everything and get that simple program working again!
+
+5, move to naming everything convention based, related! 
+

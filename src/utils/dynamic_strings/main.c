@@ -163,6 +163,8 @@ void set_def(t_string *str)
 
 int main(int argc, char **argv)
 {
+	if (argc != 2)
+		return (1);
 	char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \'hello world\'   \"karim is here\"<<<<<<<";
 	input = argv[1];
 	//char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \"hello world\"   \"karim is here\"<<<<<<<";
