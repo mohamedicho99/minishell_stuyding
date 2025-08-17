@@ -39,6 +39,7 @@ TokenType return_token_type(const char *s)
 // we'll need to move it along with the main file here to the main dir of 
 // the project and rename the old main file to something else and keep 
 // using it until we're done with it.
+/*
 int main(void)
 {
 	char *test = ">>";
@@ -46,3 +47,4 @@ int main(void)
 	printf("re: %d\n", re);
 	return (0);
 }
+*/

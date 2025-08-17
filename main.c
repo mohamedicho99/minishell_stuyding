@@ -1,6 +1,5 @@
-#include "libft.h"
+#include "minishell.h"
 
-// put this memcpy on a seperate file and add it on a header file 
 void *ft_memcpy(void *dest, void *src, int n)
 {
 	unsigned const char *s;
@@ -43,7 +42,6 @@ int is_delimiter(char c)
 	return (0);
 }
 
-//char *input = "   ls -l | cat file.txt >> here.txt   ";
 char *tokanize_word(t_string *str)
 {
 	int len;
@@ -110,29 +108,44 @@ char	*collect_delimiter(t_string *str)
 		return (NULL);
 	ft_memcpy(s, str->str + str->start, len);
 	s[len] = '\0';
-	printf("d: %s\n", s);
 	return (s);
 }
 
-
-void handle_delimiter(t_string *str)
+void create_token_node(t_list **head, char *s)
 {
-	char *word = NULL;
-	char *delimiter = NULL;
+	Token *token;
+	t_list *new;
+	TokenType t_type;
+
+	t_type = return_token_type(s);
+	token = ft_newtoken(s, t_type);
+	new = ft_lstnew(token);
+	ft_lstadd_back(head, new);
+}
+
+void handle_delimiter(t_string *str, t_list **head)
+{
+	char *word;
+	char *delimiter;
+
+	word = NULL;
+	delimiter = NULL;
 	if (str->str[str->peek] == '"' || str->str[str->peek] == '\'')
 	{
 		str->quote = str->str[str->peek];
 		word = create_quote_word(str);
 		if (word)
-			printf("qw: %s\n", word);
+			create_token_node(head, word);
 	}
 	else
 	{
 		delimiter = collect_delimiter(str);
+		if (delimiter)
+			create_token_node(head, delimiter);
 	}
 }
 
-void pc(t_string *str)
+void pc(t_string *str, t_list **head)
 {
 	char *s = NULL;
 	while (str->str[str->peek] == ' ')
@@ -145,11 +158,11 @@ void pc(t_string *str)
 			continue ;
 		}
 		if (is_delimiter(str->str[str->peek]) && str->str[str->peek] != ' ')
-			handle_delimiter(str);
+			handle_delimiter(str, head);
 		else
 		{
 			s = tokanize_word(str);
-			printf("s: %s\n", s);
+			create_token_node(head, s);
 		}
 	}
 }
@@ -165,23 +178,43 @@ void set_def(t_string *str)
 	str->w_q_len = 0;
 }
 
+void print_list(t_list *head)
+{
+	printf("_______________________________________________________\n");
+	if (!head)
+	{
+		printf("error: exiting...\n");
+		exit(0);
+	}
+	while (head)
+	{
+		printf("%s is of type %d\n", head->token->str, head->token->type);
+		head = head->next;
+	}
+}
+
 int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return (1);
+
+	t_list *head;
+	head = NULL;
 	char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \'hello world\'   \"karim is here\"<<<<<<<";
 	input = argv[1];
 	//char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \"hello world\"   \"karim is here\"<<<<<<<";
 	//input = " echo \"hello world\" c <<<<<>";
 	//input = "   echo \"hello world\"   \"karim is here\"<<<<<<< ls -l || cat file.txt >><here.txt |||||    ";
-	printf("%s\n", input);
+	printf("cmd: %s\n", input);
 	//char *input = "   ls -l | cat file.txt >> here.txt |||||    echo \"hello world\"   <<<<<<<";
 	//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"echo\"\"hello world\"\"\"\"\"\"\"   <<<<<<<";
 
 	t_string *str = ft_newstr(input);
 	set_def(str);
 
-	pc(str);
+	pc(str, &head);
+
+	print_list(head);
 	return (0);
 }
 //"   ls -l | cat file.txt >> here.txt   ";

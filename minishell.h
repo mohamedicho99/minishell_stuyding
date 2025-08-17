@@ -29,6 +29,21 @@ typedef struct list
 }	t_list;
 
 
+typedef struct
+{
+	char *str;
+	char del;
+	int len;
+	int cap;
+	int start;
+	int end;
+	int peek;
+	char quote;
+	int q_pos;
+	int w_q_len;
+} t_string;
+
+
 Token *ft_newtoken(char *s, TokenType type);
 t_list *ft_lstnew(Token *token);
 void	ft_lstadd_back(t_list **head, t_list *new);
