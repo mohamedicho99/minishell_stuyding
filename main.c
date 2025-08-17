@@ -202,6 +202,7 @@ int main(int argc, char **argv)
 	head = NULL;
 	char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \'hello world\'   \"karim is here\"<<<<<<<";
 	input = argv[1];
+	input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
 	//char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \"hello world\"   \"karim is here\"<<<<<<<";
 	//input = " echo \"hello world\" c <<<<<>";
 	//input = "   echo \"hello world\"   \"karim is here\"<<<<<<< ls -l || cat file.txt >><here.txt |||||    ";
@@ -217,22 +218,4 @@ int main(int argc, char **argv)
 	print_list(head);
 	return (0);
 }
-//"   ls -l | cat file.txt >> here.txt   ";
-//start creating tokens
-//if just word , add word
-//if delim, check if it's what you want , keep adding them until you find
-//another thing other than that value!
-//you can add it to the struct as last delim found,
-//it can either be 0 or any of these > | < " '
-//
-//test examples 
-//find the most complex  valid command 
-//	this one should pass
-//find the most complex unvalid command 
-//	this one should not pass
-//
-//
-//
-//	what happens in this case
-//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"\"\"\"\"\"\"\"\"\"   <<<<<<<";
 //you should legit ask about how to handle this thing

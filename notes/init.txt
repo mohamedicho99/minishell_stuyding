@@ -1,5 +1,6 @@
-kan han
-what do i know so far about parsing? 
+TODO: create two tokens for \ (backslash) and ; (semi_colon)
+	if any detected, give syntax error
+_____________________________________________________________________________________________________________
 
 parsing has tree stages! 
 
@@ -12,28 +13,7 @@ parsing has tree stages!
 	
 3. building the command! 
 
-________
-
-let's get obssesed with this one! 
-
-but how can i do that? 
-
-obsessed here might mean:
-
-first,
-	know the subject inside and out, cause we are doing the bonus, 
-		so, i need to be on the look out for that! 
-
-2nd,
-	break the thing down into problems and learn from different people how 
-		did they solve different problems! 
-
-	(there are some very unique and simple but powerfull solutions out there,
-		like how S.a.a.d used the a char variable to populate with either
-		single or double quotes and called that process activating either 
-		single or double quote, so he knows how his program should act!)
-
-______________
+________________________________________________________________________________________________________________________________
 
 (grammar rules are extracted regarding the positioning and syntax of the tokens)
 (every token has it's own rules if you look deeply into it!
@@ -43,25 +23,6 @@ rules:
 		WORD_TOKEN PIPE_TOKEN WORD_TOKEN/RED_TOKEN
 	for every new token, we run the rules check! 
 		based on what the token is
-	create two tokens for \ (backslash) and ; (semi_colon)
-		if any detected, give syntax error
+TODO: create two tokens for \ (backslash) and ; (semi_colon)
+	if any detected, give syntax error
 
-_____________________
-
-number one priority: 
-
-practice making tokens out of a command first! 
-
-do this for about two hours or so! 
-
-firt do it without quotes at first.
-
-try to think about dynamic string and how could you implement them in here! 
-
-
-_________________________________________
-
-right now, i should be coding, i don't know exaactly what's keeping from doing
-	the work that needs to be done! 
-
-i think all i need is some pushups
