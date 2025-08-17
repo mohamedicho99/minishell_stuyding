@@ -33,5 +33,6 @@ Token *ft_newtoken(char *s, TokenType type);
 t_list *ft_lstnew(Token *token);
 void	ft_lstadd_back(t_list **head, t_list *new);
 t_list *ft_lstlast(t_list *lst);
+TokenType return_token_type(const char *s);
 
 #endif

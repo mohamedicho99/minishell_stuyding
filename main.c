@@ -1,140 +1,205 @@
-#include "minishell.h"
-#include <readline/readline.h>
+#include "libft.h"
 
-
-
-/* flag = 0;
- *     "ls"       -l  >>>>>>>>> out | "cat  | "      0
- * while is space = skip
- * {text = ls / type = word }
- * {text = -l / type = word}
- * {text = >>>>>>>> / type = redirect_app}
- * {text = out / type = word}
- * {text = | / type = pipe}
- * {text = cat   |  / type = word}
- * */
-
-
-
-int ft_strlen(char *s)
+// put this memcpy on a seperate file and add it on a header file 
+void *ft_memcpy(void *dest, void *src, int n)
 {
-	int i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	unsigned const char *s;
+	unsigned char *d;
+
+	d = (unsigned char *)dest;
+	s = (unsigned const char *)src;
+
+	while (n--)
+		*d++ = *s++;
+	return (dest);
 }
 
-void print_list(t_list *head)
+t_string *ft_newstr(char *s)
 {
-	while (head)
+	t_string	*new;
+	int			len;
+
+	new = malloc(sizeof(t_string));
+	if (!new)
+		return (NULL);
+	len = strlen(s);
+	new->str = malloc(sizeof(char) * (len + 1));
+	if (!new->str)
 	{
-		printf("%s is of type %d\n", head->token->str, head->token->type);
-		head = head->next;
+		free(new);
+		return (NULL);
 	}
-}
-
-TokenType ret_t_type(char *s)
-{
-	if (*s == '|')
-		return (T_PIPE);
-	else if (*s == '>')
-		return (T_RED_OUT);
-	else if (*s == '<')
-		return (T_RED_OUT);
-	else
-		return (T_WORD);
-}
-
-void tokanize_word(char *s, int i, int j, t_list **head)
-{
-	int		len;
-	char	*word;
-	t_list	*new;
-	Token	*token;
-
-	len = i - j;
-	word = malloc(sizeof(char) * (len + 1));
-	j = 0;
-	while (s[j] && j < len)
-	{
-		word[j] = s[j];
-		j++;
-	}
-	word[j] = '\0';
-
-	token = ft_newtoken(word, T_WORD);
-	new = ft_lstnew(token);
-	ft_lstadd_back(head, new);
-	return ;
+	ft_memcpy(new->str, s, len);
+	new->str[len] = '\0';
+	new->cap = len + 1;
+	new->len = len;
+	return (new);
 }
 
 int is_delimiter(char c)
 {
-	if (c == '|' || c == '>' || c == '<' || c == ' ' || c == '\0')
+	if (c == '"' || c == ' ' || c == '|' || c == '>' || c == '<' || c == '\'')
 		return (1);
 	return (0);
 }
 
-void pc(char *str)
+//char *input = "   ls -l | cat file.txt >> here.txt   ";
+char *tokanize_word(t_string *str)
 {
-	int i = 0;
-	int j = 0;
-	t_list *head;
-	head = NULL;
+	int len;
+	char *s;
 
-	while (str[i])
+	s = NULL;
+	str->start = str->peek;
+	str->end = str->peek;
+	while (str->peek < str->len && !is_delimiter(str->str[str->peek]))
 	{
-		if (!is_delimiter(str[i]))
-			i++;
-		else if (is_delimiter(str[i]))
-		{
-			// save the value of str[i], example: str[i] = '|'
-			// continue reading until you find anything that doesn't equal pipe
-			tokanize_word(str, i, j, &head);
-			j = ++i;
-			/*
-			c = str[i];
-			while (str[j] && str[j] == c)
-				j++;
-			tokanize_del(str, c, i, j, &head);
-			i += j;
-			*/
-		}
-		tokanize_word(str, i, j, &head);
+		str->end++;
+		str->peek++;
 	}
-	print_list(head);
+	len = str->end - str->start;
+	s = malloc(sizeof(char) * (len + 1));
+	if (!s)
+		return (NULL);
+	ft_memcpy(s, str->str + str->start, len);
+	s[len] = '\0';
+	return (s);
+}
+
+char *create_quote_word(t_string *str)
+{
+	int len;
+	char *s;
+
+	s = NULL;
+	str->peek++;
+	str->start = str->peek;
+	str->end = str->peek;
+	while (str->peek < str->len && str->str[str->peek] != str->quote)
+	{
+		str->end++;
+		str->peek++;
+	}
+	len = str->end - str->start;
+	s = malloc(sizeof(char) * (len + 1));
+	if (!s)
+		return (NULL);
+	ft_memcpy(s, str->str + str->start, len);
+	s[len] = '\0';
+	str->peek++;
+	return (s);
+}
+
+char	*collect_delimiter(t_string *str)
+{
+	int len;
+	char *s;
+
+	s = NULL;
+	str->del = str->str[str->peek];
+	str->start = str->peek;
+	str->end = str->peek;
+	while ((str->peek < str->len) && (str->str[str->peek] == str->del))
+	{
+		str->peek++;
+		str->end++;
+	}
+	len = str->end - str->start;
+	s = malloc(sizeof(char) * (len + 1));
+	if (!s)
+		return (NULL);
+	ft_memcpy(s, str->str + str->start, len);
+	s[len] = '\0';
+	printf("d: %s\n", s);
+	return (s);
 }
 
 
-
-
-
-int main(void)
+void handle_delimiter(t_string *str)
 {
-	char *input;
-	while (1)
+	char *word = NULL;
+	char *delimiter = NULL;
+	if (str->str[str->peek] == '"' || str->str[str->peek] == '\'')
 	{
-		input = readline("prompt $ ");
-		if (!input)
-			break;
-		pc(input);
-		if (*input == '\0')
-		{
-			free(input);
-			break;
-		}
-		free(input);
+		str->quote = str->str[str->peek];
+		word = create_quote_word(str);
+		if (word)
+			printf("qw: %s\n", word);
 	}
+	else
+	{
+		delimiter = collect_delimiter(str);
+	}
+}
+
+void pc(t_string *str)
+{
+	char *s = NULL;
+	while (str->str[str->peek] == ' ')
+		str->peek++;
+	while (str->peek < str->len)
+	{
+		if (str->str[str->peek] == ' ')
+		{
+			str->peek++;
+			continue ;
+		}
+		if (is_delimiter(str->str[str->peek]) && str->str[str->peek] != ' ')
+			handle_delimiter(str);
+		else
+		{
+			s = tokanize_word(str);
+			printf("s: %s\n", s);
+		}
+	}
+}
+
+void set_def(t_string *str)
+{
+	str->start = 0;
+	str->end = 0;
+	str->peek = 0;
+	str->del = '\0';
+	str->quote = '\0';
+	str->q_pos = 0;
+	str->w_q_len = 0;
+}
+
+int main(int argc, char **argv)
+{
+	if (argc != 2)
+		return (1);
+	char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \'hello world\'   \"karim is here\"<<<<<<<";
+	input = argv[1];
+	//char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \"hello world\"   \"karim is here\"<<<<<<<";
+	//input = " echo \"hello world\" c <<<<<>";
+	//input = "   echo \"hello world\"   \"karim is here\"<<<<<<< ls -l || cat file.txt >><here.txt |||||    ";
+	printf("%s\n", input);
+	//char *input = "   ls -l | cat file.txt >> here.txt |||||    echo \"hello world\"   <<<<<<<";
+	//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"echo\"\"hello world\"\"\"\"\"\"\"   <<<<<<<";
+
+	t_string *str = ft_newstr(input);
+	set_def(str);
+
+	pc(str);
 	return (0);
 }
-
-// space
-// '\0' null terminator
-// operators
-// 	append
-// 	heredoc
-// 	pipe
-// 	redirect input
-// 	redirect output
+//"   ls -l | cat file.txt >> here.txt   ";
+//start creating tokens
+//if just word , add word
+//if delim, check if it's what you want , keep adding them until you find
+//another thing other than that value!
+//you can add it to the struct as last delim found,
+//it can either be 0 or any of these > | < " '
+//
+//test examples 
+//find the most complex  valid command 
+//	this one should pass
+//find the most complex unvalid command 
+//	this one should not pass
+//
+//
+//
+//	what happens in this case
+//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"\"\"\"\"\"\"\"\"\"   <<<<<<<";
+//you should legit ask about how to handle this thing
