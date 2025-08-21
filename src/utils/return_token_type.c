@@ -1,9 +1,7 @@
-#include "minishell.h"
+#include "../../minishell.h"
 
 TokenType return_token_type(const char *s)
 {
-	// we need to check this s if it does even exit somewhere before this
-	// function
 	if (!s || !*s)
 		return (0);
 	if (s[0] == '|')
@@ -24,13 +22,3 @@ TokenType return_token_type(const char *s)
 	}
 	return (0);
 }
-
-/*
-int main(void)
-{
-	char *test = ">>";
-	TokenType re = return_token_type(test);
-	printf("re: %d\n", re);
-	return (0);
-}
-*/

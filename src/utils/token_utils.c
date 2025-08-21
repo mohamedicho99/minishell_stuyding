@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../minishell.h"
 
 Token *ft_newtoken(char *s, TokenType type)
 {
@@ -54,15 +54,3 @@ void ft_lstadd_back(t_list **head, t_list *new)
 	last = ft_lstlast(*head);
 	last->next = new;
 }
-/*
-int main(void)
-{
-	char *cmd = "echo";
-	Token *here = ft_newtoken(cmd, T_WORD);
-
-	t_list *new = ft_lstnew(here);
-	printf("%s is %d\n", new->token->str, new->token->type);
-
-	return (0);
-}
-*/
