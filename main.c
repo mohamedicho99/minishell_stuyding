@@ -1,18 +1,5 @@
 #include "minishell.h"
 
-void *ft_memcpy(void *dest, void *src, int n)
-{
-	unsigned const char *s;
-	unsigned char *d;
-
-	d = (unsigned char *)dest;
-	s = (unsigned const char *)src;
-
-	while (n--)
-		*d++ = *s++;
-	return (dest);
-}
-
 t_string *ft_newstr(char *s)
 {
 	t_string	*new;
@@ -203,6 +190,7 @@ int main(int argc, char **argv)
 	char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \'hello world\'   \"karim is here\"<<<<<<<";
 	input = argv[1];
 	input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
+	input = "   \"\"\"\" ";
 	//char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \"hello world\"   \"karim is here\"<<<<<<<";
 	//input = " echo \"hello world\" c <<<<<>";
 	//input = "   echo \"hello world\"   \"karim is here\"<<<<<<< ls -l || cat file.txt >><here.txt |||||    ";

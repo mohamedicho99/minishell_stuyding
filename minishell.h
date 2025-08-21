@@ -44,6 +44,7 @@ typedef struct
 } t_string;
 
 
+void *ft_memcpy(void *dest, void *src, int n);
 Token *ft_newtoken(char *s, TokenType type);
 t_list *ft_lstnew(Token *token);
 void	ft_lstadd_back(t_list **head, t_list *new);

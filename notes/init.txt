@@ -26,3 +26,22 @@ rules:
 TODO: create two tokens for \ (backslash) and ; (semi_colon)
 	if any detected, give syntax error
 
+
+______________
+
+i need to get to the point where i use make to test everythhing
+
+______
+
+answer this
+	what should happen if a syntax error happens! 
+
+	have a function that prints the syntax error 
+	free everything
+	return with the proper exit status
+
+__________ steps 
+
+let's build a function that goes throught the entire thing!
+
+because this one is the one we can inject every check into!
