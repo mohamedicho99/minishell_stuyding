@@ -2,8 +2,8 @@ NAME = minishell
 SRC = main.c \
 	  src/utils/token_utils.c  \
 	  src/utils/return_token_type.c \
-	  libft/ft_memcpy.c \
-	  libft/is_delimiter.c
+	  src/libft/ft_memcpy.c \
+	  src/libft/is_delimiter.c
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 LIBS = -lreadline

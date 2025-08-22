@@ -43,7 +43,6 @@ typedef struct
 	int w_q_len;
 } t_string;
 
-
 void *ft_memcpy(void *dest, void *src, int n);
 Token *ft_newtoken(char *s, TokenType type);
 t_list *ft_lstnew(Token *token);
