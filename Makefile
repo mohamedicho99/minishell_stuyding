@@ -11,7 +11,7 @@ SRC = main.c \
 	  src/libft/ft_memcpy.c \
 	  src/libft/is_delimiter.c
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g
 LIBS = -lreadline
 
 all: $(NAME)
