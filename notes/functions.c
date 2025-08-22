@@ -1,20 +1,15 @@
 // TODO: break down that main file into more than just that 
 // and start including from src
 // do this thing first, think about it first tho
+// (check: done)
 //
+// TODO: 
 // make these functions 
-//
 // travel through nodes!
 // check pipes syntax 
 // check redirection syntax 
 // check append syntax 
 // check heredoc sysntax 
-//
-//
-// NOTE: it's okey to make every function really small,
-// becauses that keeps it's objective very clear!
-// 
-// NOTE: even tho those function are small now! you can always add stuff to them later!
 //
 //
 // TODO: make a struct that has 3 fags 
