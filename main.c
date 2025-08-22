@@ -11,6 +11,7 @@ void add_token(t_list **head, char *str, TokenType type)
 	ft_lstadd_back(head, node);
 }
 
+
 char *extract_word(char **p, int size)
 {
 	char *string = malloc((size + 1) * sizeof(char));
@@ -65,6 +66,34 @@ void tokenize(char *str, t_list **head)
 		{ }
 	  	else if (tokenize_metachar(&str, head))
 		{ }
+	}
+}
+
+void syntax_error(t_list *head)
+{
+	t_list *cur = head;
+	int i = 0;
+	TokenType prev_token_type;
+	while (cur)
+	{
+		if (cur->token->type == T_PIPE)
+		{
+			if (i == 0)
+			{	
+				printf("[+] syntax error\n");
+				printf("{-} pipe cannot be first node\n");
+				exit(0);
+			}
+			if (prev_token_type == T_PIPE)
+			{	
+				printf("[+] syntax error\n");
+				printf("{-} multiple pipes after each other\n");
+				exit(0);
+			}
+		}
+		prev_token_type = cur->token->type;
+		i++;
+		cur = cur->next; 
 	}
 }
 	
@@ -128,6 +157,7 @@ int main()
 	char *input = "echo'sjid'|echo -n";
 	input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
 	tokenize(input, &head);
+	syntax_error(head);
 
 	print_list(head);
 	return (0);

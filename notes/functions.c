@@ -55,3 +55,12 @@
 // in case the heredoc came first
 // then he executes only that heredoc!
 // other than that it's all good
+//
+//
+//
+// TODO: |||||| >>>>> <<<<<< <><><>< 
+// handle syntax errors
+// handle expand
+// remove double and single quotes from strings 
+// build he command
+//
