@@ -3,6 +3,20 @@
 // do this thing first, think about it first tho
 // (check: done)
 //
+// NOTE: mapping this thing out!
+// tokanizing (done)
+// syntax and grammar (in progress)
+// heredoc
+// build the cmd
+//
+// TODO: checks in order
+// 1, check syntax first
+// 		save the position of it if found
+// 2, check grammar/position second for syntax error
+// 		save the position of it if found
+// 3, check for heredoc
+// 		save the position of it if found
+//
 // TODO: 
 // make these functions 
 // travel through nodes!
@@ -31,13 +45,6 @@
 // throught the linked list and prints whether heredoc is found
 //
 //
-// TODO: checks in order
-// 1, check syntax first
-// 		save the position of it if found
-// 2, check grammar/position second
-// 		save the position of it if found
-// 3, check for heredoc
-// 		save the position of it if found
 //
 // TODO: think about a way to use all this data to build the command
 // and also tell to inform the executioner to execute the heredoc only 
