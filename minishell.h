@@ -56,5 +56,12 @@ Token *ft_newtoken(char *s, TokenType type);
 t_list *ft_lstnew(Token *token);
 t_list *ft_lstlast(t_list *lst);
 void ft_lstadd_back(t_list **head, t_list *new);
+t_string *ft_newstr(char *s);
+char *tokanize_word(t_string *str);
+char *create_quote_word(t_string *str);
+void set_def(t_string *str);
+void create_token_node(t_list **head, char *s);
+char	*collect_delimiter(t_string *str);
+void handle_delimiter(t_string *str, t_list **head);
 
 #endif
