@@ -58,7 +58,7 @@ void tokenize(char *str, t_list **head)
 }
 
 
-// new part
+/* new part
 t_command *parsing(char *cmd_str)
 {
     t_command *cmd = malloc(sizeof(t_command));
@@ -171,3 +171,4 @@ void	init(t_command **command, t_env **env_vars)
 		i++;
 	}
 }
+*/
