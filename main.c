@@ -75,20 +75,6 @@ void syntax_error(t_list *head)
 }
 	
 
-void print_list(t_list *head)
-{
-	printf("_______________________________________________________\n");
-	if (!head)
-	{
-		printf("error: exiting...\n");
-		exit(0);
-	}
-	while (head)
-	{
-		printf("%s is of type %d\n", head->token->str, head->token->type);
-		head = head->next;
-	}
-}
 
 void init(t_list **head)
 {
@@ -106,11 +92,15 @@ int main()
 {
 
 	t_list *head;
+	t_command *command;
+	command = NULL;
 	head = NULL;
 	// printf("cmd: %s\n", input);
 
 	init(&head);
+	parsing(&command, head);
 
-	print_list(head);
+	//print_list(head);
+	debug_print_all(head, command);
 	return (0);
 }

@@ -1,6 +1,8 @@
 NAME = minishell
 SRC = main.c \
 	  src/parsing.c  \
+	  src/ad_print.c  \
+	  src/printing.c  \
 	  src/utils/tokenizing.c  \
 	  src/utils/token_utils.c  \
 	  src/utils/return_token_type.c \
@@ -13,7 +15,7 @@ SRC = main.c \
 	  src/libft/ft_memcpy.c \
 	  src/libft/is_delimiter.c
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g
+CFLAGS = -g3 -Wall -Wextra -Werror #-fsanitize=address
 LIBS = -lreadline
 
 all: $(NAME)

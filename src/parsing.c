@@ -57,6 +57,75 @@ void tokenize(char *str, t_list **head)
 	}
 }
 
+int count_w_tokens(t_list *head)
+{
+	t_list	*cur;
+	int		i;
+
+	if (!head)
+		return (0);
+	cur = head;
+	i = 0;
+	while (cur)
+	{
+		cur = cur->next;
+		i++;
+	}
+	return (i);
+}
+
+t_command *parsing(t_command **command, t_list *head)
+{
+	// NOTE: that cur->token->str we pass to redir_new is actually null 
+	// when we print it! i think i should replace it
+	if (!head)
+		return (NULL);
+
+	t_list *cur = head;
+    t_command *cmd = malloc(sizeof(t_command));
+	int len = count_w_tokens(head);
+	int j = 0;
+    cmd->args = malloc(sizeof(char *) * (len + 1));
+	cmd->args[len] = NULL;
+    cmd->redir = NULL;
+    cmd->pipe_out = 0;
+    cmd->next = NULL;
+
+    while (cur)
+    {
+		if (cur->token->type == T_PIPE)
+		{
+			break ;
+		}
+		else if (cur->token->type == T_RED_IN)
+		{
+			cur = cur->next;
+			redir_addback(&cmd->redir, redir_new(cur->token->str, 0));
+		}
+		else if (cur->token->type == T_RED_OUT)
+		{
+			cur = cur->next;
+			redir_addback(&cmd->redir, redir_new(cur->token->str, 1));
+		}
+		else if (cur->token->type == T_APPEND)
+		{
+			cur = cur->next;
+			redir_addback(&cmd->redir, redir_new(cur->token->str, 2));
+		}
+		else if (cur->token->type == T_HEREDOC)
+		{
+			cur = cur->next;
+			redir_addback(&cmd->redir, redir_new(cur->token->str, 3));
+		}
+		else
+			cmd->args[j++] = cur->token->str;
+		cur = cur->next;
+    }
+	cmd_lstaddback(command, cmd);
+	if (cur && cur->token->type == T_PIPE && cur->next)
+			parsing(command, cur->next);
+    return cmd;
+}
 
 /* new part
 t_command *parsing(char *cmd_str)
@@ -85,90 +154,5 @@ t_command *parsing(char *cmd_str)
     }
     cmd->args[j] = NULL;
     return cmd;
-}
-
-char	*ft_lstgetvar(t_env *command, char *str)
-{
-	int	i;
-
-	while (command)
-	{
-		i = 0;
-		while (command->var[i] == str[i] && str[i])
-			i++;
-		if (command->var[i] == '=')
-			return (&command->var[i + 1]);
-		command = command->next;
-	}
-	return ("");
-}
-
-char	*replace_variable(t_env *env_vars, char *input)
-{
-	int	i;
-	int	j;
-	char	*var;
-	char	*new;
-
-	new = "";
-	i = 0;
-	while (input[i] && input[i] != '$')
-		i++;
-	j = 1;
-	if (input[i] == '$')
-	{
-		while (input[i + j] != ' ' && input[i + j])
-			j++;
-		var = ft_lstgetvar(env_vars, ft_substr(input, i + 1, j));
-		new = ft_strjoin(ft_substr(input, 0, i), var);
-		i += j;
-		j = i;
-		while (input[j])
-			j++;
-		new = ft_strjoin(new, ft_substr(input, i, j));
-	}
-	return (new);
-}
-
-void	ft_lstfree(t_env **head)
-{
-	t_env	*tmp;
-
-	while (*head)
-	{
-		tmp = (*head)->next;
-		free(*head);
-		*head = tmp;
-	}
-}
-
-void	init(t_command **command, t_env **env_vars)
-{
-	char	*input;
-	char	**cmds;
-	int		i;
-	input = readline("minishell$ ");
-	if (!input)
-	{
-		ft_lstfree(env_vars);
-		rl_clear_history();
-		write(1, "exit\n", 5);
-		exit(0);
-	}
-	else
-		add_history(input);
-	if (ft_strchr(input, '$'))
-		input = replace_variable(*env_vars, input);
-	cmds = ft_split(input, '|');
-	i = 0;
-	while (cmds[i])
-	{
-		t_command	*new;
-	
-		new = parsing(cmds[i]);
-		new->next = NULL;
-		cmd_lstaddback(command, new);
-		i++;
-	}
 }
 */

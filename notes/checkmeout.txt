@@ -33,3 +33,18 @@ i first initialize a command (cmd)
 
 after i hit a pipe
 	i create a new command and keep doing the same thing until i finish
+
+
+
+_____________
+
+in the parsing function! 
+
+what happens when you call the function within itself? 
+	using the recursion!
+
+do you call it with the node that has pipe, 
+because if so! 
+
+it will always return to that pipe and exit and that alone is going to 
+create maybe an infinity look
