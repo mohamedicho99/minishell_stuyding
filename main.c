@@ -69,8 +69,11 @@ void tokenize(char *str, t_list **head)
 	}
 }
 
-void syntax_error(t_list *head)
+void pipe_syntax_error(t_list *head)
 {
+	// TODO: handle if pipe is last node
+	if (!head)
+		return ;
 	t_list *cur = head;
 	int i = 0;
 	TokenType prev_token_type;
@@ -90,33 +93,56 @@ void syntax_error(t_list *head)
 				printf("{-} multiple pipes after each other\n");
 				exit(0);
 			}
+			if (!cur->next || cur->next->token->type != T_WORD)
+			{
+				printf("[+] syntax error\n");
+				printf("{-} pipe without next command\n");
+				exit(0);
+			}
 		}
 		prev_token_type = cur->token->type;
 		i++;
 		cur = cur->next; 
 	}
 }
-	
 
-/*
-void *random() 
+void redir_syntax_error(t_list *head)
 {
+	if (!head)
+		return ;
+	t_list *cur = head;
+	TokenType pttype;
+	TokenType cttype;
+	while (cur)
 	{
-		if (str->str[str->peek] == ' ')
+		cttype = cur->token->type;
+		if (cttype == T_RED_OUT || cttype == T_RED_IN || cttype == T_APPEND || cttype == T_HEREDOC)
 		{
-			str->peek++;
-			continue ;
+			if (pttype == T_RED_OUT || pttype == T_RED_IN || pttype == T_APPEND || pttype == T_HEREDOC)
+			{
+				printf("[+] syntax error\n");
+				printf("{-} multiple redirections after each other\n");
+				exit(0);
+			}
+			if (!cur->next || cur->next->token->type != T_WORD)
+			{
+				printf("[+] syntax error\n");
+				printf("{-} redirection without target\n");
+				exit(0);
+			}
 		}
-		if (is_delimiter(str->str[str->peek]) && str->str[str->peek] != ' ')
-			handle_delimiter(str, head);
-		else
-		{
-			s = tokanize_word(str);
-			create_token_node(head, s);
-		}
+		pttype = cur->token->type;
+		cur = cur->next;
 	}
 }
-*/
+
+void syntax_error(t_list *head)
+{
+	pipe_syntax_error(head);
+	redir_syntax_error(head);
+}
+	
+
 void print_list(t_list *head)
 {
 	printf("_______________________________________________________\n");
@@ -155,7 +181,8 @@ int main()
 	*/
 	//char tokenize(char *str, t_list **head)
 	char *input = "echo'sjid'|echo -n";
-	input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
+	//input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
+	input = "   echo |    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   > echo << end";
 	tokenize(input, &head);
 	syntax_error(head);
 
