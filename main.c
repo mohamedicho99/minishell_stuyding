@@ -158,36 +158,27 @@ void print_list(t_list *head)
 	}
 }
 
-int main()
+void parsing(t_list **head)
 {
-	// if (argc != 2)
-		// return (1);
-
-	t_list *head;
-	head = NULL;
-	// char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \'hello world\'   \"karim is here\"<<<<<<<";
-	// input = argv[1];
-	//input = "   \"\"\"\" ";
-	//char *input = "   ls -l | cat file.txt >><here.txt |||||    echo \"hello world\"   \"karim is here\"<<<<<<<";
-	//input = " echo \"hello world\" c <<<<<>";
-	//input = "   echo \"hello world\"   \"karim is here\"<<<<<<< ls -l || cat file.txt >><here.txt |||||    ";
-	// printf("cmd: %s\n", input);
-	//char *input = "   ls -l | cat file.txt >> here.txt |||||    echo \"hello world\"   <<<<<<<";
-	//char *input = "   ls -l | cat file.txt >> here.txt |||||    \"echo\"\"hello world\"\"\"\"\"\"\"   <<<<<<<";
-
-	/*
-	t_string *str = ft_newstr(input);
-	set_def(str);
-	*/
-	//char tokenize(char *str, t_list **head)
 	char *input = "echo'sjid'|echo -n";
 	//input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
 	input = "   echo |    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   > echo << end";
-	tokenize(input, &head);
-	syntax_error(head);
+	// TODO: handle these cases
+	//input = "   \"\"\"\" ";
+	//input = "   ls -l | cat file.txt >> here.txt     \"echo \"\"hello world\"\"\"\"\"\"\"   ";
+	tokenize(input, head);
+	syntax_error(*head);
+}
+
+int main()
+{
+
+	t_list *head;
+	head = NULL;
+	// printf("cmd: %s\n", input);
+
+	parsing(&head);
 
 	print_list(head);
 	return (0);
 }
-//you should legit ask about how to handle this thing
-//o
