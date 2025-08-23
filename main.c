@@ -1,74 +1,6 @@
 #include "minishell.h"
 #include <stdbool.h>
 
-void add_token(t_list **head, char *str, TokenType type)
-{
-	t_list *node = malloc(sizeof(t_list));
-	node->token = malloc(sizeof(Token));
-	node->token->type = type;
-	node->token->str = str;
-	node->next = NULL;
-	ft_lstadd_back(head, node);
-}
-
-
-char *extract_word(char **p, int size)
-{
-	char *string = malloc((size + 1) * sizeof(char));
-	ft_memcpy(string, *p, size);
-	string[size] = '\0';
-	*p += size;
-	return string;
-}
-
-bool tokenize_word(char **p, t_list **head)
-{
-	char in_quote = '\0';
-	char *str = *p;
-	while (*str)
-	{
-		if (!in_quote && (*str == '"' || *str == '\''))
-			in_quote = *str;
-		else if (*str == in_quote)
-			in_quote = '\0';
-		else if (!in_quote && strchr("><| \t", *str))
-			break;
-		str++;
-	}
-	int size = str - *p;
-	if (size <= 0)
-		return false;
-	add_token(head, extract_word(p, size), T_WORD);
-	return true;
-}
-
-bool tokenize_metachar(char **str, t_list **head)
-{
-	if ((*str)[0] == '|')
-		return ((*str)++, add_token(head, NULL, T_PIPE), true);
-	if ((*str)[0] == '>' && (*str)[1] == '>')
-		return (*str+=2, add_token(head, NULL, T_APPEND), true);
-	if ((*str)[0] == '<' && (*str)[1] == '<')
-		return (*str+=2, add_token(head, NULL, T_HEREDOC), true);
-	if ((*str)[0] == '>')
-		return ((*str)++, add_token(head, NULL, T_RED_OUT), true);
-	if ((*str)[0] == '<')
-		return ((*str)++, add_token(head, NULL, T_RED_IN), true);
-	return false;
-}
-
-void tokenize(char *str, t_list **head)
-{
-	while (str && *str)
-	{
-		while (*str == ' ' || *str == '\t') str++;
-		if (tokenize_word(&str, head))
-		{ }
-	  	else if (tokenize_metachar(&str, head))
-		{ }
-	}
-}
-
 void pipe_syntax_error(t_list *head)
 {
 	// TODO: handle if pipe is last node
@@ -158,7 +90,7 @@ void print_list(t_list *head)
 	}
 }
 
-void parsing(t_list **head)
+void init(t_list **head)
 {
 	char *input = "echo'sjid'|echo -n";
 	//input = "   ls -l | cat file.txt >> here.txt |||||    \"okey \" here\" nice\" right\" word\" something\"\"\"\"   <<<<<<<";
@@ -177,7 +109,7 @@ int main()
 	head = NULL;
 	// printf("cmd: %s\n", input);
 
-	parsing(&head);
+	init(&head);
 
 	print_list(head);
 	return (0);

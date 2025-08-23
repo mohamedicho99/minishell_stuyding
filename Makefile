@@ -1,5 +1,7 @@
 NAME = minishell
 SRC = main.c \
+	  src/parsing.c  \
+	  src/utils/tokenizing.c  \
 	  src/utils/token_utils.c  \
 	  src/utils/return_token_type.c \
 	  src/utils/new_t_string.c \

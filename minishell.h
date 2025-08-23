@@ -5,6 +5,23 @@
 #include <stdio.h>
 #include <string.h>
 #include <readline/readline.h>
+#include <stdbool.h>
+
+typedef struct s_redir
+{
+	char			*file;
+	int				type; // 0=input, 1=output, 2=append, 3=heredoc
+	int				heredoc_fd;
+	struct s_redir	*next;
+}					t_redir;
+
+typedef struct s_command
+{
+	char				**args;		// command + arguments
+	t_redir				*redir;		// linked list of redirections
+	int					pipe_out;	// 1 if output is piped to next command
+	struct s_command	*next;		// next command in pipeline
+}						t_command;
 
 typedef enum
 {
@@ -27,7 +44,6 @@ typedef struct list
 	Token 		*token;
 	struct list	*next;
 }	t_list;
-
 
 typedef struct
 {
@@ -63,5 +79,15 @@ void set_def(t_string *str);
 void create_token_node(t_list **head, char *s);
 char	*collect_delimiter(t_string *str);
 void handle_delimiter(t_string *str, t_list **head);
+// tokenizing
+void tokenize(char *str, t_list **head);
+bool tokenize_metachar(char **str, t_list **head);
+char *extract_word(char **p, int size);
+void add_token(t_list **head, char *str, TokenType type);
+bool tokenize_word(char **p, t_list **head);
+// from ayoub
+void		cmd_lstaddback(t_command **head, t_command *new);
+t_redir		*redir_new(char *file, int type);
+void		redir_addback(t_redir **head, t_redir *new);
 
 #endif
